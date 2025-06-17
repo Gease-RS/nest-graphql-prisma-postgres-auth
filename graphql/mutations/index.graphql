@@ -1,0 +1,124 @@
+# ===== MUTATIONS DE AUTENTICAÇÃO =====
+
+# Registrar novo usuário
+mutation Register {
+  register(input: {
+    email: "usuario@exemplo.com"
+    password: "123456"
+    name: "João Silva"
+  }) {
+    accessToken
+    user {
+      id
+      email
+      name
+      role
+      createdAt
+    }
+  }
+}
+
+# Login
+mutation Login {
+  login(input: {
+    email: "usuario@exemplo.com"
+    password: "123456"
+  }) {
+    accessToken
+    user {
+      id
+      email
+      name
+      role
+      createdAt
+    }
+  }
+}
+
+# Renovar token (usa cookie automaticamente)
+mutation RefreshToken {
+  refreshToken {
+    accessToken
+  }
+}
+
+# Logout
+mutation Logout {
+  logout
+}
+
+# Logout de todos os dispositivos
+mutation LogoutAll {
+  logoutAll
+}
+
+
+# ===== MUTATIONS DE USUÁRIO =====
+
+# Atualizar perfil
+mutation UpdateProfile {
+  updateProfile(input: {
+    name: "Novo Nome"
+    email: "novo@email.com"
+  }) {
+    id
+    email
+    name
+    role
+    updatedAt
+  }
+}
+
+# Deletar conta
+mutation DeleteAccount {
+  deleteAccount
+}
+
+# ===== HEADERS NECESSÁRIOS =====
+
+# Para queries/mutations protegidas, adicione o header:
+# {
+#   "Authorization": "Bearer SEU_ACCESS_TOKEN_AQUI"
+# }
+
+# ===== EXEMPLO DE USO NO FRONTEND =====
+
+# JavaScript/TypeScript exemplo:
+# 
+# // Login
+# const loginResponse = await fetch('/graphql', {
+#   method: 'POST',
+#   headers: {
+#     'Content-Type': 'application/json',
+#   },
+#   credentials: 'include', // IMPORTANTE: inclui cookies
+#   body: JSON.stringify({
+#     query: `
+#       mutation Login($input: LoginInput!) {
+#         login(input: $input) {
+#           accessToken
+#           user { id email name role }
+#         }
+#       }
+#     `,
+#     variables: {
+#       input: { email: "user@example.com", password: "123456" }
+#     }
+#   })
+# });
+#
+# const { data } = await loginResponse.json();
+# const accessToken = data.login.accessToken;
+#
+# // Usar em requests subsequentes
+# const protectedResponse = await fetch('/graphql', {
+#   method: 'POST',
+#   headers: {
+#     'Content-Type': 'application/json',
+#     'Authorization': `Bearer ${accessToken}`
+#   },
+#   credentials: 'include',
+#   body: JSON.stringify({
+#     query: `query Me { me { id email name } }`
+#   })
+# });

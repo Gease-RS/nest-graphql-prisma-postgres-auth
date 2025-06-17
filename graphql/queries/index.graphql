@@ -1,0 +1,106 @@
+# ===== QUERIES DE USUÁRIO =====
+
+# Buscar perfil atual (requer Authentication header)
+query Me {
+  me {
+    id
+    email
+    name
+    role
+    createdAt
+  }
+}
+
+# Buscar todos os usuários
+query Users {
+  users {
+    id
+    email
+    name
+    role
+    createdAt
+  }
+}
+
+# Buscar usuário específico
+query User {
+  user(id: "user_id_aqui") {
+    id
+    email
+    name
+    role
+    createdAt
+  }
+}
+
+# Buscar perfil
+query Profile {
+  profile {
+    id
+    email
+    name
+    role
+    createdAt
+  }
+}
+
+# Estatísticas (apenas ADMIN)
+query UserStats {
+  userStats {
+    totalUsers
+    usersByRole {
+      role
+      _count
+    }
+    activeTokens
+  }
+}
+
+# ===== HEADERS NECESSÁRIOS =====
+
+# Para queries/mutations protegidas, adicione o header:
+# {
+#   "Authorization": "Bearer SEU_ACCESS_TOKEN_AQUI"
+# }
+
+# ===== EXEMPLO DE USO NO FRONTEND =====
+
+# JavaScript/TypeScript exemplo:
+# 
+# // Login
+# const loginResponse = await fetch('/graphql', {
+#   method: 'POST',
+#   headers: {
+#     'Content-Type': 'application/json',
+#   },
+#   credentials: 'include', // IMPORTANTE: inclui cookies
+#   body: JSON.stringify({
+#     query: `
+#       mutation Login($input: LoginInput!) {
+#         login(input: $input) {
+#           accessToken
+#           user { id email name role }
+#         }
+#       }
+#     `,
+#     variables: {
+#       input: { email: "user@example.com", password: "123456" }
+#     }
+#   })
+# });
+#
+# const { data } = await loginResponse.json();
+# const accessToken = data.login.accessToken;
+#
+# // Usar em requests subsequentes
+# const protectedResponse = await fetch('/graphql', {
+#   method: 'POST',
+#   headers: {
+#     'Content-Type': 'application/json',
+#     'Authorization': `Bearer ${accessToken}`
+#   },
+#   credentials: 'include',
+#   body: JSON.stringify({
+#     query: `query Me { me { id email name } }`
+#   })
+# });
