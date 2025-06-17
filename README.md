@@ -61,7 +61,6 @@ npx prisma db push
 # 10. (Opcional) Popular o banco com dados de teste
 npx prisma db seed
 
-# COMANDO COMPLETO PARA COPIAR E COLAR:
 # Dependências de produção
 npm install @nestjs/graphql @nestjs/apollo @apollo/server-express graphql @nestjs/jwt @nestjs/passport passport passport-jwt passport-local @prisma/client bcrypt cookie-parser helmet @nestjs/throttler class-validator class-transformer
 
